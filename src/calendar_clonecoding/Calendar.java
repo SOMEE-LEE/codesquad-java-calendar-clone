@@ -13,7 +13,7 @@ public class Calendar {
 
 		// 두 정수를 입력하면 화면에 두 정수의 합을 출력한다.
 		System.out.println("두 수의 합은" + (a + b) + "이다");
-		// sc.close();
+		sc.close();
 	}
 
 }
