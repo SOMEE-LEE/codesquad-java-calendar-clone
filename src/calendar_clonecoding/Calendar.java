@@ -30,8 +30,6 @@ public class Calendar {
 		Scanner sc = new Scanner(System.in);
 		// 자바의 Calendar 클래스를 이름을 정해서 생성
 		Calendar cal = new Calendar();
-		// 반복횟수를 입력하라는 문구를 출력하고, repeat이라는 변수로 숫자를 입력받음
-		System.out.println("반복횟수를 입력하세요.");
 
 		int month = 1;
 
