@@ -11,7 +11,7 @@ public class Calendar {
 		return MAX_DAYS[month - 1];
 	}
 
-// 가상 달력 샘플 (void 메소드인 printSampleCalendar를 만들어 가상의 달력 생성)
+	// 가상 달력 샘플 (void 메소드인 printSampleCalendar를 만들어 가상의 달력 생성)
 	public void printSampleCalendar() {
 		System.out.println("  일 월  화  수  목 금  토");
 		System.out.println("----------------------");
@@ -23,19 +23,34 @@ public class Calendar {
 
 	public static void main(String[] args) {
 		// 숫자를 입력받아 해당하는 달의 최대 일수를 출력하는 프로그램
+
+		// 출력할 프롬프트 문자
+		String PROMPT = "cal> ";
 		// 스캐너 열기
 		Scanner sc = new Scanner(System.in);
-		// 자바의 Calendar 클래스를 cal이라는 이름으로 생성
+		// 자바의 Calendar 클래스를 이름을 정해서 생성
 		Calendar cal = new Calendar();
 		// 반복횟수를 입력하라는 문구를 출력하고, repeat이라는 변수로 숫자를 입력받음
 		System.out.println("반복횟수를 입력하세요.");
-		int repeat = sc.nextInt();
 
-		// 정수 i를 0으로 설정하고, repeat에 입력한 수보다 작으면 1씩 증가시킨다.
-		for (int i = 0; i < repeat; i++) {
-			// 달을 입력하라는 문구를 출력하고, month라는 변수로 숫자를 입력받음
+		int month = 1;
+
+		// 횟수가 사라지지 않는 반복 - while문에 true를 사용하여 무한루프
+		while (true) {
+			// 달을 입력하라는 문구를 출력
 			System.out.println("달을 입력하세요");
-			int month = sc.nextInt();
+			// 프롬프트 문자 및 커서 출력
+			System.out.print(PROMPT);
+			// month라는 변수로 숫자를 입력받음
+			month = sc.nextInt();
+			// month에 -1을 입력할경우 프로그램 종료
+			if (month == -1) {
+				break;
+			}
+			// month가 12보다 클 경우 프로그램 다시 실행 (루프의 처음으로 돌아감)
+			if (month > 12) {
+				continue;
+			}
 			// 입력한 월에 대한 최대 일수를 출력
 			System.out.printf("%d월은 %d일까지 있습니다. \n", month, cal.getMaxDaysOfMonth(month));
 		}
