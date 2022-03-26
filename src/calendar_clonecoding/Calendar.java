@@ -1,67 +1,70 @@
 package calendar_clonecoding;
 
-import java.util.Scanner;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 
 public class Calendar {
-	// 1월~12월의 최대 일수들을 순서대로 배열 안에 넣음
+	// 정적 메소드들을 만들어, 1월~12월의 윤년/평년 최대 일수들을 각각 순서대로 배열 안에 넣음
 	public static final int[] MAX_DAYS = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+	public static final int[] LEAP_MAX_DAYS = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
-	// MAX_DAYS 정적 메소드를 만들고 1월~12월의 최대 일수들을 순서대로 배열 안에 넣음
-	public int getMaxDaysOfMonth(int month) {
-		return MAX_DAYS[month - 1];
+	// 입력한 연도가 윤년인지 확인
+	public boolean isLeapYear(int year) {
+		if (year % 4 == 0 && (year % 100 != 0 || year % 400 != 0))
+			return true;
+		else
+			return false;
 	}
 
-	// 가상 달력 샘플 (void 메소드인 printSampleCalendar를 만들어 가상의 달력 생성)
-	public void printSampleCalendar() {
-		System.out.println("  일 월  화  수  목 금  토");
-		System.out.println("----------------------");
-		System.out.println("  1  2  3  4  5  6  7");
-		System.out.println("  8  9 10 11 12 13 14");
-		System.out.println(" 15 16 17 18 19 20 21");
-		System.out.println(" 22 23 24 25 26 27 28");
-	}
-
-	public static void main(String[] args) {
-		// 숫자를 입력받아 해당하는 달의 최대 일수를 출력하는 프로그램
-
-		// 출력할 프롬프트 문자
-		String PROMPT = "cal> ";
-		// 스캐너 열기
-		Scanner sc = new Scanner(System.in);
-		// 자바의 Calendar 클래스를 이름을 정해서 생성
-		Calendar cal = new Calendar();
-
-		int month = 1;
-
-		// 횟수가 사라지지 않는 반복 - while문에 true를 사용하여 무한루프
-		while (true) {
-			// 달을 입력하라는 문구를 출력
-			System.out.println("달을 입력하세요");
-			// 프롬프트 문자 및 커서 출력
-			System.out.print(PROMPT);
-			// month라는 변수로 숫자를 입력받음
-			month = sc.nextInt();
-			// month에 -1을 입력할경우 프로그램 종료
-			if (month == -1) {
-				break;
-			}
-			// month가 12보다 클 경우 프로그램 다시 실행 (루프의 처음으로 돌아감)
-			if (month > 12) {
-				continue;
-			}
-			// 입력한 월에 대한 최대 일수를 출력
-			System.out.printf("%d월은 %d일까지 있습니다. \n", month, cal.getMaxDaysOfMonth(month));
+	// 윤년이면 LEAP_MAX_DAYS 메소드를 호출하고, 평년이면 MAX_DAYS 메소드 호출
+	public int getMaxDaysOfMonth(int year, int month) {
+		if (isLeapYear(year)) {
+			return LEAP_MAX_DAYS[month - 1];
+		} else {
+			return MAX_DAYS[month - 1];
 		}
+	}
 
-		// "Bye~" 문구 출력
-		System.out.println("Bye~");
-		/*
-		 * 메인 메소드에서 Calendar 클래스인 cal 뒤에, 위의 void 메소드인 printSampleCalendar를 호출하여 가상 달력
-		 * 샘플 출력
-		 */
-		cal.printSampleCalendar();
-		// 스캐너 닫기
-		sc.close();
+	// 가상 달력 (void 메소드인 printCalendar를 만들어 가상의 달력 생성)
+	public void printCalendar(int year, int month) {
+		System.out.printf("    <<%d년 %d월>>\n", year, month);
+		System.out.println(" SU MO TU WE TH FR SA");
+		System.out.println("----------------------");
+
+		// get weekday automatically
+		// 1. LocalDate 생성
+		LocalDate date = LocalDate.of(year, month, 1);
+		// 2. DayOfWeek 객체 구하기
+		DayOfWeek dayofweek = date.getDayOfWeek();
+		// 3. 숫자 요일 구하기
+		int weekday = dayofweek.getValue();
+
+		// 빈 공간(공백)을 넣어 출력
+		for (int i = 0; i < weekday; i++) {
+			System.out.print("   ");
+		}
+		// 해당 년도 & 해당 달의 최대 일수 구하기
+		int maxDay = getMaxDaysOfMonth(year, month);
+		int count = 7 - weekday;
+
+		// count가 7보다 작으면 delim=count이고 그 외에는 delim=0
+		int delim = count < 7 ? count : 0;
+
+		// 첫째 주의 토요일까지 출력
+		for (int i = 1; i <= count; i++) {
+			System.out.printf("%3d", i);
+		}
+		System.out.println();
+
+		// 둘째 주 부터 마지막 주 토요일까지 출력
+		count++;
+		for (int i = count; i <= maxDay; i++) {
+			System.out.printf("%3d", i);
+			if (i % 7 == delim)
+				System.out.println();
+		}
+		System.out.println();
+		System.out.println();
 	}
 
 }
