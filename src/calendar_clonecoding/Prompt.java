@@ -1,5 +1,9 @@
 package calendar_clonecoding;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class Prompt {
@@ -22,13 +26,36 @@ public class Prompt {
 		System.out.print("COMMAND> ");
 		String command = sc.nextLine();
 
-		Prompt p = new Prompt();
-
 		if (command.equals("1")) {
-			System.out.println("일정 등록");
+			System.out.println("[일정 등록] 날짜를 입력하세요.(ex.2020-01-01)\n>");
+			String theDate = sc.nextLine();
+
+			HashMap<String, ArrayList<String>> listMap = new HashMap<String, ArrayList<String>>();
+
+			// 오늘 날짜
+			String today = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+			// 오늘 날짜를 년, 월, 일로 나눔
+			String[] toDate = today.split("-");
+
+			// 기존의 일정이 없다면, 빈 ArrayList를 추가
+			if (!listMap.containsKey(theDate)) {
+				ArrayList<String> emptyList = new ArrayList<String>();
+				listMap.put(theDate, emptyList);
+			}
+
+			// 기존의 일정이 있다면, 일정을 추가로 등록
+			System.out.print("[일정 등록] 일정을 입력하세요. \n>");
+			String theList = sc.nextLine();
+
+			ArrayList<String> existList = listMap.get(theDate);
+
+			existList.add(theList);
+			listMap.put(theDate, existList);
+
 		} else if (command.equals("2")) {
 			System.out.println("일정 검색");
 		} else if (command.equals("3")) {
+			Prompt p = new Prompt();
 			p.runPrompt();
 		} else if (command.equals("h")) {
 			System.out.println("도움말");
